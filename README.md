@@ -45,6 +45,7 @@ Usage
 ### EN
 
 | en short | en long |
+| :------------: | :-------------: | 
 
 | 
 ![image](https://github.com/MohamedAbd0/time_picker_spinner/blob/main/screenshots/en_long.jpeg) 
@@ -77,8 +78,8 @@ TimePickerSpinner(
 
 
 | ar short | ar long |
+| :------------: | :-------------: | 
 
-| 
 ![image](https://github.com/MohamedAbd0/time_picker_spinner/blob/main/screenshots/ar_long.jpeg) 
 |
 ![image](https://github.com/MohamedAbd0/time_picker_spinner/blob/main/screenshots/ar_short.jpeg)
