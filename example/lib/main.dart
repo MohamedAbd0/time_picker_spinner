@@ -61,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
               locale: const Locale('en', ''),
               time: dateTime,
               is24HourMode: false,
-              isShowSeconds: true,
+              isShowSeconds: false,
               itemHeight: 80,
               normalTextStyle: const TextStyle(
                 fontSize: 24,
