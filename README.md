@@ -127,5 +127,3 @@ TimePickerSpinner(
 locale |           bool                                                                                                     | en
 
 
-## Additional information
-it is update package of https://github.com/icemanbsi/flutter_time_picker_spinner

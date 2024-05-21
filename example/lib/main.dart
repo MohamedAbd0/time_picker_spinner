@@ -54,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Text(
               '${dateTime.hour} : ${dateTime.minute}',
-              style: Theme.of(context).textTheme.headline4,
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
             const Divider(),
             TimePickerSpinner(

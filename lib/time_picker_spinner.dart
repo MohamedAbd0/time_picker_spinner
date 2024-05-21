@@ -1,4 +1,4 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers
+// ignore_for_file: no_leading_underscores_for_local_identifiers, deprecated_member_use
 
 library time_picker_spinner;
 
@@ -12,11 +12,10 @@ class ItemScrollPhysics extends ScrollPhysics {
   final double targetPixelsLimit;
 
   const ItemScrollPhysics({
-    ScrollPhysics? parent,
+    super.parent,
     this.itemHeight,
     this.targetPixelsLimit = 3.0,
-  })  : assert(itemHeight != null && itemHeight > 0),
-        super(parent: parent);
+  }) : assert(itemHeight != null && itemHeight > 0);
 
   @override
   ItemScrollPhysics applyTo(ScrollPhysics? ancestor) {
@@ -87,7 +86,7 @@ class TimePickerSpinner extends StatefulWidget {
   final Locale? locale;
 
   const TimePickerSpinner(
-      {Key? key,
+      {super.key,
       this.time,
       this.minutesInterval = 1,
       this.secondsInterval = 1,
@@ -101,8 +100,7 @@ class TimePickerSpinner extends StatefulWidget {
       this.spacing,
       this.isForce2Digits = false,
       this.locale = const Locale('en', ''),
-      this.onTimeChange})
-      : super(key: key);
+      this.onTimeChange});
 
   @override
   // ignore: library_private_types_in_public_api
