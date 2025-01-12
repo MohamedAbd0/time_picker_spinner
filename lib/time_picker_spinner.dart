@@ -47,11 +47,6 @@ class ItemScrollPhysics extends ScrollPhysics {
   @override
   Simulation? createBallisticSimulation(
       ScrollMetrics position, double velocity) {
-    // If we're out of range and not headed back in range, defer to the parent
-    // ballistics, which should put us back in range at a item boundary.
-//    if ((velocity <= 0.0 && position.pixels <= position.minScrollExtent) ||
-//        (velocity >= 0.0 && position.pixels >= position.maxScrollExtent))
-//      return super.createBallisticSimulation(position, velocity);
     Tolerance tolerance = this.tolerance;
     final double target =
         _getTargetPixels(position as ScrollPosition, tolerance, velocity);
@@ -189,6 +184,7 @@ class _TimePickerSpinnerState extends State<TimePickerSpinner> {
 
   @override
   void initState() {
+    super.initState();
     currentTime = widget.time ?? DateTime.now();
 
     currentSelectedHourIndex =
@@ -203,8 +199,6 @@ class _TimePickerSpinnerState extends State<TimePickerSpinner> {
     minuteController = ScrollController(
         initialScrollOffset:
             (currentSelectedMinuteIndex - 1) * _getItemHeight()!);
-    //print(currentSelectedMinuteIndex);
-    //print((currentSelectedMinuteIndex - 1) * _getItemHeight()!);
 
     currentSelectedSecondIndex =
         (currentTime!.second / widget.secondsInterval).floor() +
@@ -217,8 +211,6 @@ class _TimePickerSpinnerState extends State<TimePickerSpinner> {
     apController = ScrollController(
         initialScrollOffset: (currentSelectedAPIndex - 1) * _getItemHeight()!);
 
-    super.initState();
-
     if (widget.onTimeChange != null) {
       WidgetsBinding.instance
           .addPostFrameCallback((_) => widget.onTimeChange!(getDateTime()));
@@ -226,8 +218,57 @@ class _TimePickerSpinnerState extends State<TimePickerSpinner> {
   }
 
   @override
+  void didUpdateWidget(TimePickerSpinner oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.time != oldWidget.time && widget.time != null) {
+      setState(() {
+        currentTime = widget.time;
+
+        // Update the scroll controllers to reflect the new time
+        currentSelectedHourIndex =
+            (currentTime!.hour % (widget.is24HourMode ? 24 : 12)) +
+                _getHourCount();
+        if (hourController.hasClients) {
+          hourController
+              .jumpTo((currentSelectedHourIndex - 1) * _getItemHeight()!);
+        }
+
+        currentSelectedMinuteIndex =
+            (currentTime!.minute / widget.minutesInterval).floor() +
+                (isLoop(_getMinuteCount()) ? _getMinuteCount() : 1);
+        if (minuteController.hasClients) {
+          minuteController
+              .jumpTo((currentSelectedMinuteIndex - 1) * _getItemHeight()!);
+        }
+
+        currentSelectedSecondIndex =
+            (currentTime!.second / widget.secondsInterval).floor() +
+                (isLoop(_getSecondCount()) ? _getSecondCount() : 1);
+        if (secondController.hasClients) {
+          secondController
+              .jumpTo((currentSelectedSecondIndex - 1) * _getItemHeight()!);
+        }
+
+        currentSelectedAPIndex = currentTime!.hour >= 12 ? 2 : 1;
+        if (apController.hasClients) {
+          apController.jumpTo((currentSelectedAPIndex - 1) * _getItemHeight()!);
+        }
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    hourController.dispose();
+    minuteController.dispose();
+    secondController.dispose();
+    apController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // print(minuteController.offset);
     List<Widget> contents = [
       SizedBox(
         width: _getItemWidth(),
@@ -329,11 +370,6 @@ class _TimePickerSpinnerState extends State<TimePickerSpinner> {
       int interval,
       SelectedIndexCallback onUpdateSelectedIndex,
       VoidCallback onScrollEnd) {
-    /// wrapping the spinner with stack and add container above it when it's scrolling
-    /// this thing is to prevent an error causing by some weird stuff like this
-    /// flutter: Another exception was thrown: 'package:flutter/src/widgets/scrollable.dart': Failed assertion: line 469 pos 12: '_hold == null || _drag == null': is not true.
-    /// maybe later we can find out why this error is happening
-
     Widget _spinner = NotificationListener<ScrollNotification>(
       onNotification: (scrollNotification) {
         if (scrollNotification is UserScrollNotification) {

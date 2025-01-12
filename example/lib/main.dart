@@ -6,7 +6,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
@@ -58,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             const Divider(),
             TimePickerSpinner(
-              locale: const Locale('en', ''),
+              locale: const Locale('ar', ''),
               time: dateTime,
               is24HourMode: false,
               isShowSeconds: false,
