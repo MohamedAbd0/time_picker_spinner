@@ -9,3 +9,7 @@
 ## 1.0.1
 
 - improve performance
+
+## 1.0.2
+
+- support haptic feedback

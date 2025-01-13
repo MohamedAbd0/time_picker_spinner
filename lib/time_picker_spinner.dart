@@ -3,6 +3,7 @@
 library time_picker_spinner;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // For HapticFeedback
 import 'dart:math';
 
 class ItemScrollPhysics extends ScrollPhysics {
@@ -79,26 +80,28 @@ class TimePickerSpinner extends StatefulWidget {
   final bool isForce2Digits;
   final TimePickerCallback? onTimeChange;
   final Locale? locale;
+  final bool hapticFeedback; // New parameter for haptic feedback
 
-  const TimePickerSpinner(
-      {super.key,
-      this.time,
-      this.minutesInterval = 1,
-      this.secondsInterval = 1,
-      this.is24HourMode = true,
-      this.isShowSeconds = false,
-      this.highlightedTextStyle,
-      this.normalTextStyle,
-      this.itemHeight,
-      this.itemWidth,
-      this.alignment,
-      this.spacing,
-      this.isForce2Digits = false,
-      this.locale = const Locale('en', ''),
-      this.onTimeChange});
+  const TimePickerSpinner({
+    super.key,
+    this.time,
+    this.minutesInterval = 1,
+    this.secondsInterval = 1,
+    this.is24HourMode = true,
+    this.isShowSeconds = false,
+    this.highlightedTextStyle,
+    this.normalTextStyle,
+    this.itemHeight,
+    this.itemWidth,
+    this.alignment,
+    this.spacing,
+    this.isForce2Digits = false,
+    this.locale = const Locale('en', ''),
+    this.onTimeChange,
+    this.hapticFeedback = false, // Default to false
+  });
 
   @override
-  // ignore: library_private_types_in_public_api
   _TimePickerSpinnerState createState() => _TimePickerSpinnerState();
 }
 
@@ -399,6 +402,11 @@ class _TimePickerSpinnerState extends State<TimePickerSpinner> {
             onUpdateSelectedIndex(
                 (controller.offset / _getItemHeight()!).round() + 1);
           });
+
+          // Trigger haptic feedback if enabled
+          if (widget.hapticFeedback) {
+            HapticFeedback.lightImpact();
+          }
         }
         return true;
       },
@@ -466,6 +474,11 @@ class _TimePickerSpinnerState extends State<TimePickerSpinner> {
                 (apController.offset / _getItemHeight()!).round() + 1;
             isAPScrolling = true;
           });
+
+          // Trigger haptic feedback if enabled
+          if (widget.hapticFeedback) {
+            HapticFeedback.lightImpact();
+          }
         }
         return true;
       },

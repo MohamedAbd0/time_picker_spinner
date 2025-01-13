@@ -63,6 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
               is24HourMode: false,
               isShowSeconds: false,
               itemHeight: 80,
+              hapticFeedback: true,
               normalTextStyle: const TextStyle(
                 fontSize: 24,
               ),
